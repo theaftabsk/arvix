@@ -253,5 +253,31 @@ export const apiService = {
         body: JSON.stringify({ action, payload })
       });
     } catch (e) {}
+  },
+
+  async getSettings(): Promise<any> {
+    try {
+      const res = await fetch(`${API_BASE_URL}/settings/`);
+      if (res.ok) return await res.json();
+    } catch (e) {}
+    return null;
+  },
+
+  async updateSettings(payload: {
+    default_ai_provider?: string;
+    default_ai_model?: string;
+    gemini_api_key?: string;
+    groq_api_key?: string;
+    openai_api_key?: string;
+  }): Promise<any> {
+    const res = await fetch(`${API_BASE_URL}/settings/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) {
+      throw new Error(`Failed to update settings: ${res.statusText}`);
+    }
+    return await res.json();
   }
 };
