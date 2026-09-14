@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  arvix-server:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: arvix-brain-server
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_ENV=production
+      - DATABASE_URL=postgresql://arvix_user:arvix_secret_pass@arvix-postgres:5432/arvix_db
+      - SECRET_KEY=arvix_super_secret_jwt_key_change_me_in_production
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ALLOWED_HOSTS=*
+    depends_on:
+      - arvix-postgres
+      - arvix-redis
+    volumes:
+      - arvix_data:/app/data
+
+  arvix-postgres:
+    image: pgvector/pgvector:pg16
+    container_name: arvix-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: arvix_user
+      POSTGRES_PASSWORD: arvix_secret_pass
+      POSTGRES_DB: arvix_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - arvix_pgdata:/var/lib/postgresql/data
+
+  arvix-redis:
+    image: redis:7-alpine
+    container_name: arvix-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - arvix_redisdata:/data
+
+volumes:
+  arvix_data:
+  arvix_pgdata:
+  arvix_redisdata:

@@ -1,0 +1,35 @@
+# Node / Frontend
+node_modules/
+desktop/node_modules/
+desktop/dist/
+.vite/
+
+# Python / Backend
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+backend/venv/
+backend/.venv/
+*.egg-info/
+.pytest_cache/
+
+# PyInstaller build files (keep source & launcher)
+build/
+dist/
+*.spec.bak
+
+# Databases & local state
+*.db
+*.sqlite3
+backend/arvix_local.db
+
+# Environment variables & secrets
+.env
+backend/.env
+
+# OS files
+.DS_Store
+Thumbs.db
+*.log
